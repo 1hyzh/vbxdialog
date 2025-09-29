@@ -1604,108 +1604,8 @@ local Dropdown = Tab3:CreateDropdown({
     end,
 })
 
-local ToggleAutoHide = Tab3:CreateToggle({
-    Name = "AutoHide (risky)",
-    CurrentValue = false,
-    Flag = "ToggleAutoHide",
-    Callback = function(Value)
-        local Workspace = game:GetService("Workspace")
-        local RunService = game:GetService("RunService")
-        local player = game.Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-
-        local entityNames = {
-            "RushMoving",
-            "AmbushMoving",
-            "GlitchRush"
-        }
-
-        local RemoteConnection
-
-        if Value == true then
-            -- Play initial sound and notification
-            local sound = Instance.new("Sound", workspace)
-            sound.SoundId = "rbxassetid://4590662766"
-            sound.Volume = _G.VolumeTime or 2
-            sound.PlayOnRemove = true
-            sound:Destroy()
-
-            Rayfield:Notify({
-                Title = "AutoHide",
-                Content = "You will need to get glitch to get back on track.",
-                Duration = 6.5,
-                Image = 4483362458, -- Customize this image
-            })
-
-            -- Listen for entities spawning in Workspace
-            RemoteConnection = Workspace.ChildAdded:Connect(function(child)
-                if table.find(entityNames, child.Name) then
-                    print("Entity Detected:", child.Name)
-
-                    -- Play sound and show notification upon entity spawn
-                    local sound = Instance.new("Sound", workspace)
-                    sound.SoundId = "rbxassetid://4590662766"
-                    sound.Volume = _G.VolumeTime or 2
-                    sound.PlayOnRemove = true
-                    sound:Destroy()
-
-                    Rayfield:Notify({
-                        Title = "AutoHide",
-                        Content = "Trying to teleport...",
-                        Duration = 6.5,
-                        Image = 4483362458, -- Customize this image
-                    })
-
-                    -- Teleporting logic (teleport every frame while the entity is present)
-                    local originalCFrame = character.HumanoidRootPart.CFrame
-                    local targetPosition
-
-                    -- Determine target position based on the dropdown selection
-                    if teleportDirection == "Under" then
-                        targetPosition = originalCFrame.Position - Vector3.new(0, 50, 0) -- 50 studs below
-                    elseif teleportDirection == "Above" then
-                        targetPosition = originalCFrame.Position + Vector3.new(0, 50, 0) -- 50 studs above
-                    end
-
-                    -- Start the loop to teleport continuously
-                    local entityGone = false
-                    local teleportLoop
-                    teleportLoop = coroutine.create(function()
-                        while true do
-                            -- Teleport the player every frame to prevent being caught by the entity
-                            character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
-
-                            -- Check if the entity is still present in the workspace
-                            if not Workspace:FindFirstChild(child.Name) then
-                                entityGone = true
-                            end
-
-                            -- If the entity is no longer in the workspace, teleport back to the original position
-                            if entityGone then
-                                character:SetPrimaryPartCFrame(originalCFrame)  -- Use the original CFrame (position + rotation)
-                                break  -- Exit the loop once teleportation is done
-                            end
-
-                            wait(0.01)  -- Small wait to avoid locking up the game while continuously teleporting
-                        end
-                    end)
-
-                    -- Start the teleportation coroutine
-                    coroutine.resume(teleportLoop)
-                end
-            end)
-        else
-            -- Turn OFF: disconnect listeners
-            if RemoteConnection then
-                RemoteConnection:Disconnect()
-                RemoteConnection = nil
-            end
-        end
-    end
-})
-
 local ToggleAutoHide2 = Tab3:CreateToggle({
-    Name = "AutoHide 2",
+    Name = "AutoHide",
     CurrentValue = false,
     Flag = "ToggleAutoHide",
     Callback = function(Value)
@@ -1719,7 +1619,8 @@ local ToggleAutoHide2 = Tab3:CreateToggle({
         local entityNames = {
             "RushMoving",
             "AmbushMoving",
-            "GlitchRush"
+            "GlitchRush",
+            "GlitchAmbush"
         }
 
         local RemoteConnection
@@ -1777,11 +1678,33 @@ local ToggleAutoHide2 = Tab3:CreateToggle({
 
                         -- Once the entity is gone, teleport back to the original position
                         character:SetPrimaryPartCFrame(originalCFrame)
+                        local sound = Instance.new("Sound", workspace)
+                        sound.SoundId = "rbxassetid://4590662766"
+                        sound.Volume = _G.VolumeTime or 2
+                        sound.PlayOnRemove = true
+                        sound:Destroy()
+
+                        Rayfield:Notify({
+                            Title = "AutoHide",
+                            Content = "Look to the nearest void!",
+                            Duration = 6.5,
+                            Image = 4483362458, -- Customize this image
+                        })
                         wait(2)
                         local newPosition = humanoidRootPart.Position + teleportDirection * 30
                         character:SetPrimaryPartCFrame(CFrame.new(newPosition))
                         wait(.5)
-                        character:SetPrimaryPartCFrame(CFrame.new(newPosition))                      
+                        character:SetPrimaryPartCFrame(CFrame.new(newPosition))
+                        wait(.5)
+                        character:SetPrimaryPartCFrame(CFrame.new(newPosition))  
+                        wait(.5)
+                        character:SetPrimaryPartCFrame(CFrame.new(newPosition))  
+                        wait(.5)
+                        character:SetPrimaryPartCFrame(CFrame.new(newPosition))  
+                        wait(.5)
+                        character:SetPrimaryPartCFrame(CFrame.new(newPosition))  
+                        wait(.5)
+                        character:SetPrimaryPartCFrame(CFrame.new(newPosition))                        
                     end)
 
                     -- Start the teleportation loop
