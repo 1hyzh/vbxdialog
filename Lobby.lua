@@ -73,7 +73,7 @@ local Button2 = Tab:CreateButton({
 })
 
 local Button3 = Tab:CreateButton({
-   Name = "Duo Elevator",
+   Name = "Trio Elevator",
    Callback = function()
         local args = {
 	        {
@@ -89,7 +89,7 @@ local Button3 = Tab:CreateButton({
 })
 
 local Button4 = Tab:CreateButton({
-   Name = "Duo Elevator",
+   Name = "Squad Elevator",
    Callback = function()
         local args = {
 	        {
@@ -110,7 +110,7 @@ local Divider = Tab:CreateDivider()
 
 
 
-local Section2 = Tab:CreateSection("Mines elevators.")
+local Section2 = Tab:CreateSection("Mines elevators. (works without achivement)")
 
 local Button5 = Tab:CreateButton({
    Name = "Solo Elevator",
@@ -145,7 +145,7 @@ local Button6 = Tab:CreateButton({
 })
 
 local Button7 = Tab:CreateButton({
-   Name = "Duo Elevator",
+   Name = "Trio Elevator",
    Callback = function()
         local args = {
 	        {
@@ -161,7 +161,7 @@ local Button7 = Tab:CreateButton({
 })
 
 local Button8 = Tab:CreateButton({
-   Name = "Duo Elevator",
+   Name = "Squad Elevator",
    Callback = function()
         local args = {
 	        {
@@ -176,3 +176,4 @@ local Button8 = Tab:CreateButton({
    end,
 })
 local Divider2 = Tab:CreateDivider()
+
