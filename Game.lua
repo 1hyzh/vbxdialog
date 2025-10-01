@@ -1438,12 +1438,52 @@ local ItemESPCO = Tab:CreateColorPicker({
 
  local Tab3 = Window:CreateTab("Attempt of exploits", 4483362458)
 
- local Toggle1 = Tab3:CreateToggle({
+local Toggle1 = Tab3:CreateToggle({
     Name = "Door reach",
     CurrentValue = false,
     Flag = "door reach",
     Callback = function(Value)
-        local RunService = game:GetService("RunService")
+        local Workspace = game:GetService("Workspace")
+        local toggleActive = true
+
+        if Value then
+            toggleActive = true
+            task.spawn(function()
+                while toggleActive and Toggle1.CurrentValue do
+                    local currentRooms = Workspace:WaitForChild("CurrentRooms"):GetChildren()
+
+                    -- Only proceed if there are at least 2 rooms
+                    if #currentRooms >= 2 then
+                        -- Sort rooms numerically by name
+                        table.sort(currentRooms, function(a, b)
+                            return tonumber(a.Name) < tonumber(b.Name)
+                        end)
+
+                        -- Get the second-to-last room
+                        local targetRoom = currentRooms[#currentRooms - 1]
+                        if targetRoom then
+                            local door = targetRoom:FindFirstChild("Door")
+                            if door and door:FindFirstChild("ClientOpen") then
+                                door.ClientOpen:FireServer()
+                            end
+                        end
+                    end
+
+                    task.wait(0.05) -- loop delay (adjust if needed)
+                end
+            end)
+        else
+            toggleActive = false
+        end
+    end,
+})
+
+
+local Toggle2 = Tab3:CreateToggle({
+    Name = "AntiScreech",
+    CurrentValue = false,
+    Flag = "antiscr",
+    Callback = function(Value)
         local Workspace = game:GetService("Workspace")
         local toggleActive = true  -- Local flag to help stop the loop when toggled off
 
@@ -1451,11 +1491,12 @@ local ItemESPCO = Tab:CreateColorPicker({
             toggleActive = true
             task.spawn(function()
                 while toggleActive and Toggle1.CurrentValue do
-                    local door = Workspace:FindFirstChild("CurrentRooms") and Workspace.CurrentRooms:FindFirstChild("0")
-                    if door and door:FindFirstChild("Door") and door.Door:FindFirstChild("ClientOpen") then
-                        door.Door.ClientOpen:FireServer()
-                    end
-                    task.wait(0.01)
+                    local args = {
+	                    true
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("RemotesFolder"):WaitForChild("Screech"):FireServer(unpack(args))
+
+                 wait(0.1)
                 end
             end)
         else
@@ -1686,7 +1727,7 @@ local ToggleAutoHide2 = Tab3:CreateToggle({
 
                         Rayfield:Notify({
                             Title = "AutoHide",
-                            Content = "Look to the nearest void!",
+                            Content = "Look to the nearest void! (you need to get glitch to get back on track)",
                             Duration = 6.5,
                             Image = 4483362458, -- Customize this image
                         })
