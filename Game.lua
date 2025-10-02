@@ -1871,44 +1871,41 @@ local ButtonDisableSeek = Tab3:CreateButton({
 
 local Tab5 = Window:CreateTab("Main", 4483362458) -- Title, Image
 local ws = 16
+
+local ws = 16 -- default from slider
+local toggleActive = false -- track toggle state outside the callback
+
 local Slider = Tab5:CreateSlider({
     Name = "WalkSpeed",
-    Range = {0, 30},
+    Range = {0, 22},
     Increment = 1,
     Suffix = "ws",
     CurrentValue = 16,
-    Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Flag = "Slider1",
     Callback = function(Value)
         ws = Value
     end,
- })
+})
 
- local Toggle = Tab5:CreateToggle({
+local Toggle = Tab5:CreateToggle({
     Name = "Toggle WalkSpeed",
     CurrentValue = false,
     Flag = "Toggle1",
     Callback = function(Value)
-        local Players = game:GetService("Players")
-        local toggleActive = true
-
+        toggleActive = Value
         if Value then
-            toggleActive = true
             task.spawn(function()
-                while toggleActive and Toggle.CurrentValue do
-                    local character = Players.LocalPlayer.Character
-                    local humanoid = character and character:FindFirstChildWhichIsA("Humanoid")
-                    if humanoid then
-                        humanoid.WalkSpeed = ws
-                    end
-                    task.wait(1)
+                while toggleActive do
+                    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = ws
+                    task.wait(0.1) -- faster update than 1 second
                 end
             end)
         else
-            toggleActive = false
+            -- Reset walkspeed when untoggled (optional)
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
         end
     end,
 })
-
 local NoclipLoop = nil
 
 local Toggle1 = Tab5:CreateToggle({
