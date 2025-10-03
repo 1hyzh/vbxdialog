@@ -16,11 +16,19 @@ end
 if game.PlaceId == DoorsLobby then
  loadstring(game:HttpGet("https://raw.githubusercontent.com/1hyzh/vbxdialog/refs/heads/main/Lobby.lua"))()
  createNotification("Script Loaded", "The script for the lobby has loaded!")
+
+elseif game.PlaceId == DoorsGame then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/1hyzh/vbxdialog/refs/heads/main/Game.lua"))()
+    createNotification("Script Loaded", "The script for the game has loaded!")    
+
+else
+    
+createNotification("vbxdialog", "The script isnt intended for this game!") 
+    
 end
 
-if game.PlaceId == DoorsGame then
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/1hyzh/vbxdialog/refs/heads/main/Game.lua"))()
-    createNotification("Script Loaded", "The script for the game has loaded!")
-end
+
+
+
 
 
