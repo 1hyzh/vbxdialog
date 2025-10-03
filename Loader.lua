@@ -23,9 +23,10 @@ elseif game.PlaceId == DoorsGame then
 
 else
     
-createNotification("vbxdialog", "The script isnt intended for this game!") 
+    createNotification("vbxdialog", "The script isnt intended for this game!") 
     
 end
+
 
 
 
